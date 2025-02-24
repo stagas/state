@@ -1,0 +1,10 @@
+{
+  "name": "@stagas/state",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./state.ts",
+    "./react": "./react.ts",
+    "./preact": "./preact.ts"
+  }
+}

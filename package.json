@@ -1,0 +1,33 @@
+{
+  "name": "state",
+  "version": "1.0.0",
+  "description": "Minimalistic signals state management for React, Preact, and more.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "tsx --test *.{ts,tsx}"
+  },
+  "keywords": [
+    "react",
+    "preact",
+    "state",
+    "signals"
+  ],
+  "author": "stagas",
+  "license": "MIT",
+  "dependencies": {
+    "@preact/signals": "^2.0.1"
+  },
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^17.1.4",
+    "@preact/signals-react": "^3.0.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/preact": "^3.2.4",
+    "@testing-library/react": "^16.2.0",
+    "@types/node": "^22.13.5",
+    "@types/react": "^19.0.10",
+    "expect": "^29.7.0",
+    "preact": "^10.26.2",
+    "react": "^19.0.0",
+    "tsx": "^4.19.3"
+  }
+}
