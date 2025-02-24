@@ -2,6 +2,10 @@
 
 Minimalistic signals state management for React, Preact, and more.
 
+Uses the wonderful [@preact/signals](https://preactjs.com/guide/v10/signals/) under the hood and provides a minimalistic API to use signals anywhere in your code.
+
+Supports React / Preact.
+
 ```ts
 const $ = state({
   count: 42,
