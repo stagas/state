@@ -1,34 +1,38 @@
 import { computed, effect, signal } from '@preact/signals'
 import type { $, Fx, Of } from './core.ts'
-import { Derived, MissingProp } from './core.ts'
+import { Derived, MissingProp, MissingDerivedProp } from './core.ts'
 export { derive, nullable } from './core.ts'
 
 export function state<T extends Record<string, unknown>>($: T): $<T> {
-  let runs = false
+  let depth = 0
   let peeking = false
   let thrown: Error | symbol | null = null
   let value: unknown = null
 
   const state$ = function brk(_value?: unknown) {
     value = _value
-    if (thrown) throw thrown
+    if (thrown && depth) {
+      const error = thrown
+      thrown = null
+      throw error
+    }
+    thrown = null
     peeking = true
   }
 
   const fx: Fx = function fx(fn) {
     effect(() => {
-      runs = true
+      ++depth
       try {
         fn()
       }
       catch (e) {
-        if (e === MissingProp) return
+        if (e === MissingProp || e === MissingDerivedProp) return
         throw e
       }
       finally {
-        runs = false
+        if (!--depth) thrown = null
         peeking = false
-        thrown = null
       }
     })
   }
@@ -45,19 +49,17 @@ export function state<T extends Record<string, unknown>>($: T): $<T> {
   for (const key in $) {
     const val = $[key]
     if (typeof val === 'object' && val !== null && Derived in val) {
-      // Wrap getters in computed
       const s = computed(() => {
-        runs = true
+        ++depth
         try {
           return (val as any).fn(state$)
         }
         catch (e) {
-          if (e === MissingProp) return value
+          if (e === MissingDerivedProp) return value
           throw e
         }
         finally {
-          runs = false
-          thrown = null
+          if (!--depth) thrown = null
           value = null
         }
       })
@@ -66,20 +68,19 @@ export function state<T extends Record<string, unknown>>($: T): $<T> {
         get() {
           if (peeking) return s.peek()
           const ret = s.value
-          if (runs && ret == null) thrown = MissingProp
+          if (depth && ret == null) thrown = MissingDerivedProp
           return ret
         }
       })
     }
     else {
-      // Regular properties use signal
       const s = signal(val)
       $$[key] = s
       Object.defineProperty(state$, key, {
         get() {
           if (peeking) return s.peek()
           const ret = s.value
-          if (runs && ret == null) thrown = MissingProp
+          if (depth && ret == null) thrown = MissingDerivedProp
           return ret
         },
         set(value) {

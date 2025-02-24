@@ -7,6 +7,8 @@ Uses the wonderful [@preact/signals](https://preactjs.com/guide/v10/signals/) un
 Supports React / Preact.
 
 ```ts
+import { state } from 'jsr:@stagas/state'
+
 const $ = state({
   count: 42,
   foo: nullable('bar'),

@@ -16,6 +16,7 @@ export type $<T> = T & {
 }
 
 export const MissingProp = Symbol('MissingProp')
+export const MissingDerivedProp = Symbol('MissingDerivedProp')
 export const Derived = Symbol('Derived')
 
 export function nullable<T>(v: T | null): T | null {
@@ -26,7 +27,7 @@ export function derive<T>(
   fn: {
     ($$: {
       (v: T): void
-    }): void
+    }): T
   }
 ): T {
   return { [Derived]: true, fn } as any

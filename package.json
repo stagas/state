@@ -4,7 +4,8 @@
   "description": "Minimalistic signals state management for React, Preact, and more.",
   "main": "index.ts",
   "scripts": {
-    "test": "tsx --test *.{ts,tsx}"
+    "test": "tsx --test *.{ts,tsx}",
+    "test:watch": "tsx --watch --test *.{ts,tsx}"
   },
   "keywords": [
     "react",

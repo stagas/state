@@ -1,6 +1,7 @@
 import assert from 'node:assert'
 import test from 'node:test'
 import { derive, nullable, state } from './state.ts'
+import expect from 'expect'
 
 console.log('---')
 
@@ -12,7 +13,7 @@ test('state', () => {
     a: 11,
     b: 22,
     c: 33,
-    sum: derive<number>($$ => {
+    sum: derive<number>(($$): number => {
       const { a, b, nullable } = $.of($)
       $$(42) // default value when dependencies are missing
       const { c } = $
@@ -51,4 +52,28 @@ test('state', () => {
   assert.equal($.sum, 67)
   $.c = 34 // should not trigger
   assert.equal($.sum, 67)
+})
+
+test('derive missing deps', () => {
+  const $ = state({
+    firstName: 'Jane',
+    lastName: nullable<string>(null),
+    fullName: derive<string | void>(($$): string => { // first type is the default value type and second is the actual value type
+      const { firstName, lastName } = $.of($)
+      $$() // default value when dependencies are missing
+      return firstName + ' ' + lastName
+    }),
+  })
+
+  let i = 0
+  $.fx(() => {
+    const { fullName } = $.of($)
+    $()
+    i++
+  })
+
+  expect(i).toBe(0)
+  $.lastName = 'Doe' // Jane Doe
+  expect(i).toBe(1)
+  expect($.fullName).toBe('Jane Doe')
 })
