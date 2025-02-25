@@ -77,3 +77,25 @@ test('derive missing deps', () => {
   expect(i).toBe(1)
   expect($.fullName).toBe('Jane Doe')
 })
+
+test('dispose', () => {
+  const $ = state({
+    count: 42,
+  })
+
+  let i = 0
+  $.fx(() => {
+    const { count } = $.of($)
+    $()
+    return () => {
+      console.log('dispose')
+      i++
+    }
+  })
+
+  expect(i).toBe(0)
+  $.count = 69
+  expect(i).toBe(1)
+  $.count = 33
+  expect(i).toBe(2)
+})

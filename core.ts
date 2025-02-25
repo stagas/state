@@ -1,6 +1,8 @@
 import type { Signal } from '@preact/signals'
 
-export type Fx = (fn: () => void) => void
+export type Off = () => void
+
+export type Fx = (fn: () => void | Off) => void
 
 export type Of = <T extends Record<string, unknown>>(state: $<T>) => {
   [K in keyof T]-?: T[K] & {}

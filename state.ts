@@ -24,7 +24,7 @@ export function state<T extends Record<string, unknown>>($: T): $<T> {
     effect(() => {
       ++depth
       try {
-        fn()
+        return fn()
       }
       catch (e) {
         if (e === MissingProp || e === MissingDerivedProp) return

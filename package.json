@@ -1,6 +1,5 @@
 {
   "name": "state",
-  "version": "1.0.1",
   "description": "Minimalistic signals state management for React, Preact, and more.",
   "main": "index.ts",
   "scripts": {

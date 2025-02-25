@@ -23,7 +23,7 @@ export function use<T>($: T): $<T> {
       effect(() => {
         runs = true
         try {
-          fn()
+          return fn()
         }
         catch (e) {
           if (e === MissingProp) return
