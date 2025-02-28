@@ -88,7 +88,6 @@ test('dispose', () => {
     const { count } = $.of($)
     $()
     return () => {
-      console.log('dispose')
       i++
     }
   })
